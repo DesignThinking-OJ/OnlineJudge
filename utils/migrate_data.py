@@ -12,7 +12,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "oj.settings")
 django.setup()
 from django.conf import settings
 from account.models import User, UserProfile, AdminType, ProblemPermission
-from problem.models import Problem, ProblemTag, ProblemDifficulty, ProblemRuleType
+from problem.models import Problem, ProblemTag, ProblemDifficulty, ProblemRuleType, ProblemStatus
 
 admin_type_map = {
     0: AdminType.REGULAR_USER,
@@ -168,6 +168,8 @@ def import_problems():
             data["test_case_score"] = test_case_score
             data["rule_type"] = ProblemRuleType.ACM
             data["template"] = {}
+            # modifiled
+            data["status"] = ProblemStatus.NotDone
             data.pop("total_submit_number")
             data.pop("total_accepted_number")
             tag_ids = data.pop("tags")
