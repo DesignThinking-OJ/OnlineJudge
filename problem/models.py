@@ -29,12 +29,6 @@ class ProblemIOMode(Choices):
     standard = "Standard IO"
     file = "File IO"
 
-# modifiled
-class ProblemStatus(Choices):
-    NotDone = 1
-    Done = -1
-    Tried = 0
-
 
 def _default_io_mode():
     return {"io_mode": ProblemIOMode.standard, "input": "input.txt", "output": "output.txt"}
@@ -87,10 +81,10 @@ class Problem(models.Model):
     # {JudgeStatus.ACCEPTED: 3, JudgeStaus.WRONG_ANSWER: 11}, the number means count
     statistic_info = JSONField(default=dict)
     share_submission = models.BooleanField(default=False)
-    #  RS_oj
-    # label = models.TextField(null=True)
-    # level = models.IntegerField(default=0)
+    # Rs-oj
     problem_status = models.IntegerField(default=0)
+    level = models.IntegerField(default=0)
+    labels = models.TextField(null=True)
 
     class Meta:
         db_table = "problem"

@@ -5,6 +5,9 @@ from account.decorators import check_contest_permission
 from ..models import ProblemTag, Problem, ProblemRuleType
 from ..serializers import ProblemSerializer, TagSerializer, ProblemSafeSerializer
 from contest.models import ContestRuleType
+import json
+
+from django.http import HttpResponse,JsonResponse
 
 
 class ProblemTagAPI(APIView):
@@ -114,3 +117,10 @@ class ContestProblemAPI(APIView):
         else:
             data = ProblemSafeSerializer(contest_problems, many=True).data
         return self.success(data)
+
+class CuteRsAPI(APIView):
+    def get(self, request):
+        data_problem = request.GET.get("labels")
+        if data_problem:
+            return HttpResponse(json.dump(data_problem))
+        return HttpResponse("false")
