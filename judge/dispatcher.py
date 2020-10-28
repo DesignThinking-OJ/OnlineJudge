@@ -13,7 +13,7 @@ from contest.models import ContestRuleType, ACMContestRank, OIContestRank, Conte
 from options.options import SysOptions
 from problem.models import Problem, ProblemRuleType
 from problem.utils import parse_problem_template
-from submission.models import JudgeStatus, Submission
+from submission.models import JudgeStatus, Submission, UserStatus
 from utils.cache import cache
 from utils.constants import CacheKey
 
@@ -144,7 +144,7 @@ class JudgeDispatcher(DispatcherBase):
             "max_cpu_time": self.problem.time_limit,
             "max_memory": 1024 * 1024 * self.problem.memory_limit,
             "test_case_id": self.problem.test_case_id,
-            "output": True,
+            "output": False,
             "spj_version": self.problem.spj_version,
             "spj_config": spj_config.get("config"),
             "spj_compile_config": spj_config.get("compile"),
@@ -177,6 +177,8 @@ class JudgeDispatcher(DispatcherBase):
             # OI模式下, 若多个测试点全部正确则AC， 若全部错误则取第一个错误测试点状态，否则为部分正确
             if not error_test_case:
                 self.submission.result = JudgeStatus.ACCEPTED
+                # RS-oj
+                self.submission.user_status = UserStatus.User_Accepted
             elif self.problem.rule_type == ProblemRuleType.ACM or len(error_test_case) == len(resp["data"]):
                 self.submission.result = error_test_case[0]["result"]
             else:

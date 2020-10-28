@@ -9,7 +9,7 @@ from utils.shortcuts import rand_str
 
 
 class JudgeStatus:
-    COMPILE_ERROR = -2
+    COMPILE_ERROR: int = -2
     WRONG_ANSWER = -1
     ACCEPTED = 0
     CPU_TIME_LIMIT_EXCEEDED = 1
@@ -21,6 +21,10 @@ class JudgeStatus:
     JUDGING = 7
     PARTIALLY_ACCEPTED = 8
 
+class UserStatus:
+    User_Accepted = 0
+    User_Wrong = 1
+    User_Notdone = 2
 
 class Submission(models.Model):
     id = models.TextField(default=rand_str, primary_key=True, db_index=True)
@@ -39,6 +43,8 @@ class Submission(models.Model):
     # {time_cost: "", memory_cost: "", err_info: "", score: 0}
     statistic_info = JSONField(default=dict)
     ip = models.TextField(null=True)
+    # RS-OJ
+    user_status = models.IntegerField(default=UserStatus.User_Notdone)
 
     def check_user_permission(self, user, check_share=True):
         if self.user_id == user.id or user.is_super_admin() or user.can_mgmt_all_problem() or self.problem.created_by_id == user.id:
